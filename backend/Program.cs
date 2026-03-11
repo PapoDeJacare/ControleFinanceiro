@@ -10,6 +10,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=controlefinanceiro.db"));
 
+builder.Services.AddScoped<PessoaService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
