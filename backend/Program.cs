@@ -11,6 +11,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=controlefinanceiro.db"));
 
 builder.Services.AddScoped<PessoaService>();
+builder.Services.AddScoped<CategoriaService>();
 
 var app = builder.Build();
 
