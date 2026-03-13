@@ -12,6 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data S
 
 builder.Services.AddScoped<PessoaService>();
 builder.Services.AddScoped<CategoriaService>();
+builder.Services.AddScoped<TransacaoService>();
 
 var app = builder.Build();
 

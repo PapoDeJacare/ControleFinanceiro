@@ -18,6 +18,6 @@ public class CategoriaService
 
     public async Task<List<Categoria>> RetornarCategorias()
     {
-        return await _context.Categorias.ToListAsync();
+        return await _context.Categorias.Include(c => c.Transacoes).ToListAsync();
     }
 }

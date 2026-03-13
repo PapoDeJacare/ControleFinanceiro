@@ -20,12 +20,12 @@ public class PessoaService
 
     public async Task<List<Pessoa>> RetornarPessoas()
     {
-        return await _context.Pessoas.ToListAsync();
+        return await _context.Pessoas.Include(p => p.Transacoes).ToListAsync();
     }
 
     public async Task<Pessoa?> RetornarPessoa(int id)
     {
-        var pessoa = await _context.Pessoas.FindAsync(id);
+        var pessoa = await _context.Pessoas.Include(p => p.Transacoes).FirstOrDefaultAsync(p => p.Id == id);
         if(pessoa == null)
             return null;
 
