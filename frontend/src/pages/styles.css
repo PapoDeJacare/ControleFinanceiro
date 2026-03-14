@@ -1,0 +1,58 @@
+
+.header{
+    display: flex; 
+    justify-content: space-between;
+    font-weight: bold; 
+    font-size: 20px;
+    padding: .5rem 0 .5rem 0;
+    border-bottom: 1px solid white;
+}
+
+.linha{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid white;
+}
+
+.espacamento{
+    width: 20%;
+    padding: .5rem;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.espacamento-transacao{
+    width: 25%;
+    padding: .5rem;
+    align-content: center;
+    justify-content: center;
+}
+
+.espacamento-total{
+    width: 40%;
+    padding: .3rem;
+    align-content: center;
+    justify-content: center;
+}
+
+
+.modal {
+    border: 1px solid black,;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 1rem;
+}
+
+.inputs {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.botoes {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}

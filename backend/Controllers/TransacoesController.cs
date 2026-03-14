@@ -16,7 +16,7 @@ public class TransacoesController : ControllerBase
     {
         try
         {
-            var resultado = _transacaoService.CadastrarTransacao(transacao);
+            var resultado = await _transacaoService.CadastrarTransacao(transacao);
             return Ok(resultado);
         }
         catch(Exception e)
@@ -37,5 +37,19 @@ public class TransacoesController : ControllerBase
         {
             return StatusCode(500, e.Message);
         }
+    }
+
+    [HttpGet("totais-por-pessoa")]
+    public async Task<IActionResult> RetornarTotaisPorPessoa()
+    {
+        var resultado = await _transacaoService.RetornarRelatorioPorPessoa();
+        return Ok(resultado);
+    }
+
+    [HttpGet("totais-por-categoria")]
+    public async Task<IActionResult> RetornarTotaisPorCategoria()
+    {
+        var resultado = await _transacaoService.RetornarRelatorioPorCategoria();
+        return Ok(resultado);
     }
 }

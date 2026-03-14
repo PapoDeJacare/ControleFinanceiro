@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 public class TransacaoService
@@ -37,6 +36,94 @@ public class TransacaoService
 
     public async Task<List<Transacao>> RetornarTransacoes()
     {
-        return await _context.Transacoes.ToListAsync();
+        return await _context.Transacoes
+            .Include(t => t.Pessoa)
+            .Include(t => t.Categoria)
+            .ToListAsync();
+    }
+
+    public async Task<RelatorioPessoaDTO> RetornarRelatorioPorPessoa()
+    {
+        var pessoas = await RetornarTotaisPorPessoa();
+        var totalGeral = new TotalGeralDto
+        {
+            TotalReceitas = pessoas.Sum(p => p.TotalReceitas),
+            TotalDespesas = pessoas.Sum(p => p.TotalDespesas),
+            Saldo = pessoas.Sum(p => p.Saldo)
+        };
+
+        var relatorio = new RelatorioPessoaDTO
+        {
+            Pessoas = pessoas,
+            TotalGeral = totalGeral
+        };
+
+        return relatorio;
+
+    }
+
+    public async Task<List<PessoaComTotalDTO>> RetornarTotaisPorPessoa()
+    {
+        var resultado = await _context.Pessoas
+            .Select(p => new PessoaComTotalDTO
+            {
+                Nome = p.Nome,
+                Idade = p.Idade,
+                TotalReceitas = _context.Transacoes
+                    .Where(t => t.PessoaId == p.Id && t.Tipo == "receita")
+                    .Sum(t => (decimal?)t.Valor) ?? 0,
+
+                TotalDespesas = _context.Transacoes
+                    .Where(t => t.PessoaId == p.Id && t.Tipo == "despesa")
+                    .Sum(t => (decimal?)t.Valor) ?? 0
+            })
+            .ToListAsync();
+
+        foreach(var item in resultado)
+            item.Saldo = item.TotalReceitas - item.TotalDespesas;
+
+        return resultado;
+    }
+
+    public async Task<RelatorioCategoriaDTO> RetornarRelatorioPorCategoria()
+    {
+        var categorias = await RetornarTotaisPorCategoria();
+        var totalGeral = new CategoriaTotalGeralDTO
+        {
+            TotalReceitas = categorias.Sum(c => c.TotalReceitas),
+            TotalDespesas = categorias.Sum(c => c.TotalDespesas),
+            Saldo = categorias.Sum(c => c.Saldo)
+        };
+
+        var relatorio = new RelatorioCategoriaDTO
+        {
+            Categorias = categorias,
+            TotalGeral = totalGeral
+        };
+
+        return relatorio;
+
+
+    }
+
+    public async Task<List<CategoriaComTotalDTO>> RetornarTotaisPorCategoria()
+    {
+        var resultado = await _context.Categorias
+            .Select(c => new CategoriaComTotalDTO
+            {
+                Descricao = c.Descricao,
+                Finalidade = c.Finalidade,
+                TotalReceitas = _context.Transacoes
+                    .Where(t => t.CategoriaId == c.Id && t.Tipo == "receita")
+                    .Sum(t => (decimal?)t.Valor) ?? 0,
+                TotalDespesas = _context.Transacoes
+                    .Where(t => t.CategoriaId == c.Id && t.Tipo == "despesa")
+                    .Sum(t => (decimal?)t.Valor) ?? 0
+            }).ToListAsync();
+
+        foreach(var item in resultado)
+            item.Saldo = item.TotalReceitas - item.TotalDespesas;
+
+        return resultado;
     }
 }
