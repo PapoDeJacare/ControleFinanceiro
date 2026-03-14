@@ -1,4 +1,6 @@
 
+//service resposável pela chamada dos endpoints no backend
+
 const API_URL = "http://localhost:5249/api";
 
 export async function getPessoas() {

@@ -14,7 +14,7 @@ function Categorias(){
         carregarCategoriasComTotal();
     }, []);
     
-
+    //função para popular dados por categorias e o total geral retornados do backend
     async function carregarCategoriasComTotal(){
         const data = await getCategoriasComTotal();
         setCategorias(data.categorias);

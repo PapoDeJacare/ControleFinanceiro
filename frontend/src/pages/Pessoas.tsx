@@ -13,6 +13,7 @@ function Pessoas(){
         carregarPessoasComTotais();
     }, []);
     
+    //função para popular dados por pessoas e o total geral retornados do backend
     async function carregarPessoasComTotais() {
         const data = await getPessoasComTotal();
         setPessoas(data.pessoas);
