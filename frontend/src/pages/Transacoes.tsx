@@ -14,6 +14,7 @@ function Transacoes(){
     const [valor, setValor] = useState(0);
     const [erro, setErro] = useState("");
 
+    //ao carregar a tela lista as transações ja cadastradas e busca pessoas e categorias para popular os selects no formulario de cadastro de transações
     useEffect(() => {
         listarTransacoes();
         listarPessoas();
@@ -29,7 +30,7 @@ function Transacoes(){
         const data = await getPessoas();
         setPessoas(data);
     }
-
+    
     async function listarCategorias() {
         const data = await getCategorias();
         setCategorias(data);
@@ -39,6 +40,7 @@ function Transacoes(){
         setMostrarModal(true);
     }
 
+    //limpeza de formulário para não ficar com valores antigos
     function limparFormulario(){
         setPessoa("");
         setDescricao("");
@@ -47,6 +49,7 @@ function Transacoes(){
         setCategoria("");
     }
 
+    
     async function salvarTransacao(){
         const transacao = {
             descricao: descricao,
@@ -58,6 +61,7 @@ function Transacoes(){
         
         const response = await cadastrarTransacao(transacao);
 
+        //exibe o erro retornado do backend no modal de cadastro
         if(!response.ok){
             const erroTexto = await response.text();
             setErro(erroTexto);

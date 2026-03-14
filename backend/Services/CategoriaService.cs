@@ -1,5 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 
+/*
+    Service responsável pela lógica de negócio das categorias.
+    Aqui é realizado o cadastro e retorno de categorias
+*/
+
 public class CategoriaService
 {
     private readonly AppDbContext _context;

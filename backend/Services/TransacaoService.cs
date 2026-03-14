@@ -1,5 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 
+
+/*
+    Service responsável pela lógica de negócio das transações.
+    Aqui são realizadas validações como:
+    - restrição de receitas para menores de idade
+    - consistência entre tipo de transação e categoria
+    - cálculo de totais por pessoa e totais gerais
+*/
 public class TransacaoService
 {
     private readonly AppDbContext _context;
@@ -18,12 +26,15 @@ public class TransacaoService
         var categoria = await _context.Categorias.FindAsync(transacao.CategoriaId);
         if(categoria == null)
             throw new Exception("Categoria não encontrada");
-
-        if(pessoa.Idade < 18 && categoria.Finalidade == "receita")
-            throw new Exception("Menores de idade não podem ter receita");
-
+        
+        //validação para garantir consistência entre o tipo da transação e a finalidade da categoria selecionada
         if(transacao.Tipo != categoria.Finalidade)
             throw new Exception("Tipo de transação não condiz com categoria selecionada");
+        
+        // validação de regra de negócio em que menores de idade não podem ser vinculados a transações do tipo receita
+        if(pessoa.Idade < 18 && transacao.Tipo == "receita")
+            throw new Exception("Menores de idade não podem ter receita");
+
 
         if(transacao.Valor < 0)
             throw new Exception("Transação deve conter um valor positivo");
@@ -42,6 +53,7 @@ public class TransacaoService
             .ToListAsync();
     }
 
+    //função para retornar o total de receitas, despesas e saldo por pessoa e total geral de todas
     public async Task<RelatorioPessoaDTO> RetornarRelatorioPorPessoa()
     {
         var pessoas = await RetornarTotaisPorPessoa();
@@ -85,6 +97,7 @@ public class TransacaoService
         return resultado;
     }
 
+    //função para retornar o total de receitas, despesas e saldo por categoria e total geral de todas
     public async Task<RelatorioCategoriaDTO> RetornarRelatorioPorCategoria()
     {
         var categorias = await RetornarTotaisPorCategoria();

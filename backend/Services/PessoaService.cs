@@ -1,7 +1,11 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
+
+
+/*
+    Service responsável pela lógica de negócio das pessoas.
+    Aqui é realizado o CRUD de pessoas
+*/
 public class PessoaService
 {
     private readonly AppDbContext _context;
